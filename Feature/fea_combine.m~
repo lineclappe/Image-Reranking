@@ -1,0 +1,6 @@
+%Feature Combination
+%Read through all the query documents
+fea_path = 'G://LINBIN_DATA//DCNN_O';
+query_doc = dir(fea_path);
+for i = 1:length(query_doc)
+    folder_name = 
