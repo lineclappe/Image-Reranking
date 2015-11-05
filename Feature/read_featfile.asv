@@ -1,0 +1,13 @@
+function fea_m = read_featfile(fea_path)
+%read the binary file
+fid=fopen(fea_path,'rb');
+fea_m = zeros(1,4096);
+if fid == -1
+    disp('error');    
+else    
+    [fea_m,~]=fread(fid,'float');
+    fclose(fid);
+    %normalization 
+    
+end
+
