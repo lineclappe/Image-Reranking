@@ -1,0 +1,23 @@
+function rank = VisualRank(sim,d,rel)
+%Applying VisualRank Algorithm
+num = size(sim,1);
+rank = ones(num,1);
+iter_time = 100;
+%column normalize the matrix
+for i = 1:num
+    fea = sim(:,i);
+    fea = fea./sum(fea);
+    sim(:,i) = fea;
+end
+%parameters settings
+p = zeros(num,1);
+for i = 1:rel
+    p(i) = 1/rel;
+end
+i = 0;
+while i < iter_time
+    rank = d*sim*rank + (1-d)*p;
+end
+
+    
+      

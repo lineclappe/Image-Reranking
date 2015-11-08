@@ -1,0 +1,12 @@
+%Analyze the data
+%function GData
+label_dir = 'G:/LINBIN_DATA/labels.txt';
+Table = load(label_dir);
+query_set = unique(Table(:,1));
+for i = 1:length(query_set)
+    query = query_set(i);
+    %Extract the given query from the table
+    corres = find(Table(:,1) == query);
+    query_part = Table(corres(1):corres(length(corres)));
+end
+    
