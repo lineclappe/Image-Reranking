@@ -3,6 +3,8 @@ addpath('Visual Rank');
 addpath('Feature');
 addpath('Similarity');
 addpath('Data_Analyse');
+addpath('Graph-based');
+addpath('Rank_Fusion');
 img_path = 'G:\LINBIN_DATA\DCNN_O';
 sim_path = 'G:\LINBIN_DATA\simmat';
 %%
@@ -15,10 +17,14 @@ sum_ap0 = zeros(num_level,2);
 sum_ap1 = zeros(num_level,2);
 sum_ap2 = zeros(num_level,2);
 sum_ap3 = zeros(num_level,2);
+sum_ap4 = zeros(num_level,2);
+sum_ap5 = zeros(num_level,2);
 sum_ap0(1:num_level-1,1) = T_level';
 sum_ap1(1:num_level-1,1) = T_level';
 sum_ap2(1:num_level-1,1) = T_level';
 sum_ap3(1:num_level-1,1) = T_level';
+sum_ap4(1:num_level-1,1) = T_level';
+sum_ap5(1:num_level-1,1) = T_level';
 for i = 1:length(sim_dir)
     file_name = sim_dir(i).name;
 	if(strcmp(file_name,'.') == false && strcmp(file_name,'..')==false)
@@ -49,17 +55,28 @@ for i = 1:length(sim_dir)
         %4.Adaptive tune both factors at the same time
         rankscore3 = VisualRank(sim_mat,d,rel);
         [rank3,index3] = sort(rankscore3,'descend');
-         
+        %5.Confident image selection
+        index4 = confident_selection(sim_mat);
+        %6.Greedy Selection
+      %  index5 =graph_rerank(sim_mat,index4);
+        %7.Rank Fusion
+        index5  = generate_ranks(sim_mat,index3,5);
+        
+            
         %%
         %Caluclate the MAP
         AP0 = get_result(gindex,gdata,T_level);
         AP1 = get_result(index,gdata,T_level);
         AP2 = get_result(index2,gdata,T_level);
         AP3 = get_result(index3,gdata,T_level);
+        AP4 = get_result(index4,gdata,T_level);
+        AP5 = get_result(index5,gdata,T_level);
         sum_ap0(:,2) = AP0 + sum_ap0(:,2);
         sum_ap1(:,2) = AP1 + sum_ap1(:,2);
         sum_ap2(:,2) = AP2 + sum_ap2(:,2);
         sum_ap3(:,2) = AP3 + sum_ap3(:,2);
+        sum_ap4(:,2) = AP4 + sum_ap4(:,2);
+        sum_ap5(:,2) = AP5 + sum_ap5(:,2);
     end
 end
 
@@ -67,5 +84,7 @@ sum_ap0(:,2) = sum_ap0(:,2) / 353;
 sum_ap1(:,2) = sum_ap1(:,2) / 353;
 sum_ap2(:,2) = sum_ap2(:,2) / 353;
 sum_ap3(:,2) = sum_ap3(:,2) / 353;
+sum_ap4(:,2) = sum_ap4(:,2) / 353;
+sum_ap5(:,2) = sum_ap5(:,2) / 353;
 		      
         
